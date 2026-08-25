@@ -24,12 +24,11 @@ jobs:
     - name: Install ANVIL Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyyaml
+        pip install pyyaml psutil
 
     - name: Execute ANVIL Gatekeeper
-      # Replace './tests/samples/vuln.py' with your actual application entrypoint
       run: python main.py "python ./tests/samples/vuln.py" --mode gatekeeper
-      continue-on-error: true # Ensures the pipeline continues to the upload step even if ANVIL triggers a failure
+      continue-on-error: true
 
     - name: Upload SARIF Report to GitHub Security Center
       uses: github/codeql-action/upload-sarif@v2
