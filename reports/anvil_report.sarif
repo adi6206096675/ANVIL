@@ -1,0 +1,56 @@
+{
+    "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+    "version": "2.1.0",
+    "runs": [
+        {
+            "tool": {
+                "driver": {
+                    "name": "ANVIL AppSec Suite",
+                    "semanticVersion": "2.0.0",
+                    "informationUri": "https://localhost/anvil",
+                    "rules": []
+                }
+            },
+            "results": [
+                {
+                    "ruleId": "OS-COMMAND-INJECTION-RISK",
+                    "level": "error",
+                    "message": {
+                        "text": "Use of 'os.system()' passed to command shell."
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "./tests/samples/vuln.py"
+                                },
+                                "region": {
+                                    "startLine": 10
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "ruleId": "ANVIL-PROCESS-CRASH",
+                    "level": "error",
+                    "message": {
+                        "text": "Target process crashed with exit code 140 when exposed to payload: \"' OR 1=1 --\""
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "python ./tests/samples/vuln.py"
+                                },
+                                "region": {
+                                    "startLine": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

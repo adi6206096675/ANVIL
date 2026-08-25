@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ANVIL AppSec Dashboard - GATEKEEPER</title>
+    <style>
+        :root {
+            --bg: #0d1117; --panel: #161b22; --border: #30363d;
+            --text: #c9d1d9; --accent: #58a6ff; --danger: #f85149;
+            --warning: #ffa657; --success: #3fb950;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 24px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+        h1 { color: var(--accent); margin: 0; font-size: 1.8rem; }
+        .meta { color: #8b949e; font-size: 0.9rem; margin-top: 4px; }
+        .mode-tag { padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; background: #21262d; border: 1px solid var(--border); }
+        .mode-tag.GATEKEEPER { border-color: var(--danger); color: var(--danger); }
+        .mode-tag.MANUAL { border-color: var(--accent); color: var(--accent); }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .metric-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+        .metric-num { font-size: 2rem; font-weight: bold; color: var(--accent); }
+        .metric-num.has-vulns { color: var(--danger); }
+        .metric-label { color: #8b949e; font-size: 0.8rem; text-transform: uppercase; margin-top: 4px; }
+
+        h2 { color: var(--accent); font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 32px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; background: var(--panel); border-radius: 6px; overflow: hidden; }
+        th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; font-size: 0.9rem; }
+        th { background: #21262d; color: #8b949e; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+        code { background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #f0f6fc; }
+        
+        .badge { padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
+        .badge.CRITICAL, .badge.FAIL { background: rgba(248, 81, 73, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .badge.HIGH { background: rgba(255, 166, 87, 0.15); color: var(--warning); border: 1px solid var(--warning); }
+        .badge.PASS { background: rgba(63, 185, 80, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .badge.INFO, .badge.LOW, .badge.MEDIUM { background: rgba(88, 166, 255, 0.15); color: var(--accent); border: 1px solid var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>🛡️ ANVIL Security Dashboard</h1>
+            <div class="meta">Target: <code>python ./tests/samples/vuln.py</code> | Scan Time: 2026-07-27 09:46:13</div>
+        </div>
+        <div class="mode-tag GATEKEEPER">MODE: GATEKEEPER</div>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-num has-vulns">2</div>
+            <div class="metric-label">Total Vulnerabilities</div>
+        </div>
+        <div class="metric-card"><div class="metric-num">1</div><div class="metric-label">SAST Flaws</div></div>
+        <div class="metric-card"><div class="metric-num">0</div><div class="metric-label">SCA Risks</div></div>
+        <div class="metric-card"><div class="metric-num">0</div><div class="metric-label">IaC Risks</div></div>
+        <div class="metric-card"><div class="metric-num">1</div><div class="metric-label">Process Crashes</div></div>
+    </div>
+
+    <h2>1. Static Code Analysis (SAST)</h2>
+    <table>
+        <tr><th>Severity</th><th>Vulnerability</th><th>Location</th><th>Details</th></tr>
+        <tr><td><span class='badge HIGH'>HIGH</span></td><td>OS Command Injection Risk</td><td>./tests/samples/vuln.py:10</td><td>Use of 'os.system()' passed to command shell.</td></tr>
+    </table>
+
+    <h2>2. Dynamic API Contract Testing (DAST)</h2>
+    <table>
+        <tr><th>Result</th><th>Test Case / Payload</th><th>HTTP Status</th><th>Notes</th></tr>
+        <tr><td colspan='4'>No dynamic tests executed.</td></tr>
+    </table>
+
+    <h2>3. Supply Chain & Dependencies (SCA)</h2>
+    <table>
+        <tr><th>Severity</th><th>Package</th><th>CVE ID</th><th>Details</th></tr>
+        <tr><td colspan='4'>No vulnerable dependencies detected.</td></tr>
+    </table>
+
+    <h2>4. Infrastructure-as-Code (IaC)</h2>
+    <table>
+        <tr><th>Severity</th><th>Rule ID</th><th>Location</th><th>Details</th></tr>
+        <tr><td colspan='4'>No infrastructure misconfigurations detected.</td></tr>
+    </table>
+
+    <h2>5. Multi-Core Process Breaches</h2>
+    <table>
+        <tr><th>Severity</th><th>Fault Type</th><th>Crash Payload</th><th>Execution Telemetry</th></tr>
+        <tr><td><span class='badge CRITICAL'>CRITICAL</span></td><td>Exit Code 140</td><td><code>"' OR 1=1 --"</code></td><td>Execution Time: 195.86ms</td></tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+    "target": "python ./tests/samples/vuln.py",
+    "mode": "MANUAL",
+    "timestamp": "2026-07-27 09:45:42",
+    "sast": [
+        {
+            "file": "./tests/samples/vuln.py",
+            "line": 10,
+            "severity": "HIGH",
+            "type": "OS Command Injection Risk",
+            "detail": "Use of 'os.system()' passed to command shell."
+        }
+    ],
+    "dast": [],
+    "sca": [],
+    "iac": [],
+    "fuzzer": []
+}

@@ -1,0 +1,9 @@
+# For AI Analysis
+transformers
+torch
+unsloth  # Best for memory-efficient fine-tuning
+pydantic # For structured reporting
+
+# For System Interaction
+psutil   # To monitor resources
+docker   # To run software in isolated containers
