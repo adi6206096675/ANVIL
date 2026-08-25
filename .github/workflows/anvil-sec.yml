@@ -7,11 +7,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  security-events: write
-  contents: read
-  actions: read
-
 jobs:
   security-scan:
     name: AppSec Pipeline
@@ -35,8 +30,9 @@ jobs:
       run: python main.py "python ./tests/samples/vuln.py" --mode gatekeeper
       continue-on-error: true
 
-    - name: Upload SARIF Report to GitHub Security Center
-      uses: github/codeql-action/upload-sarif@v4
+    - name: Upload SARIF Report Artifact
+      uses: actions/upload-artifact@v4
       with:
-        sarif_file: reports/anvil_report.sarif
-        category: anvil-appsec
+        name: anvil-security-report
+        path: reports/anvil_report.sarif
+        retention-days: 30
