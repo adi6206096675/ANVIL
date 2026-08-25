@@ -6,7 +6,7 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/adi6206096675/ANVIL/anvil-sec.yml?branch=main&style=for-the-badge&logo=github)
 ![Python Version](https://img.shields.io/badge/python-3.11%2B-blue?style=for-the-badge&logo=python)
 ![SARIF Standard](https://img.shields.io/badge/SARIF-v2.1.0-orange?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+
 
 ---
 
