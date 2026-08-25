@@ -181,15 +181,24 @@ class AnvilExporter:
         filepath = os.path.join(self.output_dir, "anvil_report.sarif")
         results = []
 
+        def sanitize_uri(path_str: str) -> str:
+            """Cleans execution wrappers and relative path markers for strict SARIF compliance."""
+            if not path_str:
+                return "unknown_file"
+            if path_str.startswith("python "):
+                path_str = path_str.split(" ", 1)[1]
+            return path_str.lstrip("./")
+
         # 1. Map SAST Findings
         for issue in report_data.get("sast", []):
+            clean_file = sanitize_uri(issue.get("file", "unknown"))
             results.append({
                 "ruleId": issue.get("type", "SAST-VULN").replace(" ", "-").upper(),
                 "level": "error" if issue.get("severity") in ["CRITICAL", "HIGH"] else "warning",
                 "message": {"text": issue.get("detail", "Static security vulnerability detected.")},
                 "locations": [{
                     "physicalLocation": {
-                        "artifactLocation": {"uri": issue.get("file", "unknown")},
+                        "artifactLocation": {"uri": clean_file},
                         "region": {"startLine": issue.get("line", 1)}
                     }
                 }]
@@ -197,13 +206,14 @@ class AnvilExporter:
 
         # 2. Map IaC Misconfigurations
         for issue in report_data.get("iac", []):
+            clean_file = sanitize_uri(issue.get("file", "Dockerfile"))
             results.append({
                 "ruleId": issue.get("rule_id", "IAC-MISCONFIG").upper(),
                 "level": "error" if issue.get("severity") in ["CRITICAL", "HIGH"] else "warning",
                 "message": {"text": issue.get("detail", "Infrastructure configuration risk detected.")},
                 "locations": [{
                     "physicalLocation": {
-                        "artifactLocation": {"uri": issue.get("file", "Dockerfile")},
+                        "artifactLocation": {"uri": clean_file},
                         "region": {"startLine": issue.get("line", 1)}
                     }
                 }]
@@ -211,13 +221,14 @@ class AnvilExporter:
 
         # 3. Map SCA Supply Chain Vulnerabilities
         for issue in report_data.get("sca", []):
+            clean_file = sanitize_uri(issue.get("manifest", "requirements.txt"))
             results.append({
                 "ruleId": issue.get("cve_id", "SCA-VULN").upper(),
                 "level": "error" if issue.get("severity") in ["CRITICAL", "HIGH"] else "warning",
                 "message": {"text": f"Dependency '{issue.get('package')}' ({issue.get('version')}): {issue.get('detail')}"},
                 "locations": [{
                     "physicalLocation": {
-                        "artifactLocation": {"uri": issue.get("manifest", "requirements.txt")},
+                        "artifactLocation": {"uri": clean_file},
                         "region": {"startLine": 1}
                     }
                 }]
@@ -225,13 +236,14 @@ class AnvilExporter:
 
         # 4. Map Fuzzer Process Breaches
         for issue in report_data.get("fuzzer", []):
+            clean_target = sanitize_uri(report_data.get("target", "target_binary"))
             results.append({
                 "ruleId": "ANVIL-PROCESS-CRASH",
                 "level": "error",
                 "message": {"text": f"Target process crashed with exit code {issue.get('exit_code')} when exposed to payload: {repr(issue.get('payload'))}"},
                 "locations": [{
                     "physicalLocation": {
-                        "artifactLocation": {"uri": report_data.get("target", "target_binary")},
+                        "artifactLocation": {"uri": clean_target},
                         "region": {"startLine": 1}
                     }
                 }]
