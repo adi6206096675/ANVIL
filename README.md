@@ -3,7 +3,7 @@
 
 > **The Global NCAP for Software.** A production-grade, dual-layer AppSec and Chaos Engineering framework designed for interactive threat hunting and automated CI/CD pipeline enforcement.
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/adi6206096675/ANVIL/anvil-sec.yml?branch=main&style=for-the-badge&logo=github)
+[![ANVIL Sentinel](https://github.com/adi6206096675/ANVIL/actions/workflows/anvil-sec.yml/badge.svg)](https://github.com/adi6206096675/ANVIL/actions/workflows/anvil-sec.yml)
 ![Python Version](https://img.shields.io/badge/python-3.11%2B-blue?style=for-the-badge&logo=python)
 ![SARIF Standard](https://img.shields.io/badge/SARIF-v2.1.0-orange?style=for-the-badge)
 
